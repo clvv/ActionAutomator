@@ -93,7 +93,9 @@
           offset: record.attributes.offset
         });
       }
-      localStorage[key] = ids.join(', ');
+      if (ids.length > 0) {
+        localStorage[key] = ids.join(', ');
+      }
       return list;
     };
 

@@ -59,7 +59,7 @@ class Control
         id: id
         title: record.attributes.title
         offset: record.attributes.offset
-    localStorage[key] = ids.join ', '
+    localStorage[key] = ids.join ', ' if ids.length > 0
     list
 
   processURL: (url) ->
