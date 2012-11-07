@@ -94,33 +94,34 @@ class PageControl
 
   place: (records) ->
     for record in records
-      console.log record
-      $('body').append '<div id=' + record.id + '>
-        <p>
-          drag
-          <input class="playback" type="button" value="' + record.title + '" />
-          <input class="delete" type="button" value="Delete" />
-        </p>
-      </div>'
-      console.log record.offset
-      $("##{record.id}").offset record.offset if record.offset
-      $("##{record.id} .playback").click ->
-        chrome.extension.sendMessage
-          type: 'action'
-          action: 'start-playback'
-          id: record.id
-      $("##{record.id} .delete").click ->
-        chrome.extension.sendMessage
-          type: 'action'
-          action: 'delete'
-          id: record.id
-      $("##{record.id}").draggable
-        handle: 'p'
-        stop: (event, ui) =>
-          console.log 'drag stopped!'
-          console.log event
-          console.log ui
-          @updateButtonOffset record.id, ui.offset
+      do (record) =>
+        console.log record
+        $('body').append '<div id=' + record.id + '>
+          <p>
+            drag
+            <input class="playback" type="button" value="' + record.title + '" />
+            <input class="delete" type="button" value="Delete" />
+          </p>
+        </div>'
+        console.log record.offset
+        $("##{record.id}").offset record.offset if record.offset
+        $("##{record.id} .playback").click ->
+          chrome.extension.sendMessage
+            type: 'action'
+            action: 'start-playback'
+            id: record.id
+        $("##{record.id} .delete").click ->
+          chrome.extension.sendMessage
+            type: 'action'
+            action: 'delete'
+            id: record.id
+        $("##{record.id}").draggable
+          handle: 'p'
+          stop: (event, ui) =>
+            console.log 'drag stopped!'
+            console.log event
+            console.log ui
+            @updateButtonOffset record.id, ui.offset
 
   updateButtonOffset: (id, offset) ->
     chrome.extension.sendMessage

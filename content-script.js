@@ -146,41 +146,43 @@
       _results = [];
       for (_i = 0, _len = records.length; _i < _len; _i++) {
         record = records[_i];
-        console.log(record);
-        $('body').append('<div id=' + record.id + '>\
-        <p>\
-          drag\
-          <input class="playback" type="button" value="' + record.title + '" />\
-          <input class="delete" type="button" value="Delete" />\
-        </p>\
-      </div>');
-        console.log(record.offset);
-        if (record.offset) {
-          $("#" + record.id).offset(record.offset);
-        }
-        $("#" + record.id + " .playback").click(function() {
-          return chrome.extension.sendMessage({
-            type: 'action',
-            action: 'start-playback',
-            id: record.id
-          });
-        });
-        $("#" + record.id + " .delete").click(function() {
-          return chrome.extension.sendMessage({
-            type: 'action',
-            action: 'delete',
-            id: record.id
-          });
-        });
-        _results.push($("#" + record.id).draggable({
-          handle: 'p',
-          stop: function(event, ui) {
-            console.log('drag stopped!');
-            console.log(event);
-            console.log(ui);
-            return _this.updateButtonOffset(record.id, ui.offset);
+        _results.push((function(record) {
+          console.log(record);
+          $('body').append('<div id=' + record.id + '>\
+          <p>\
+            drag\
+            <input class="playback" type="button" value="' + record.title + '" />\
+            <input class="delete" type="button" value="Delete" />\
+          </p>\
+        </div>');
+          console.log(record.offset);
+          if (record.offset) {
+            $("#" + record.id).offset(record.offset);
           }
-        }));
+          $("#" + record.id + " .playback").click(function() {
+            return chrome.extension.sendMessage({
+              type: 'action',
+              action: 'start-playback',
+              id: record.id
+            });
+          });
+          $("#" + record.id + " .delete").click(function() {
+            return chrome.extension.sendMessage({
+              type: 'action',
+              action: 'delete',
+              id: record.id
+            });
+          });
+          return $("#" + record.id).draggable({
+            handle: 'p',
+            stop: function(event, ui) {
+              console.log('drag stopped!');
+              console.log(event);
+              console.log(ui);
+              return _this.updateButtonOffset(record.id, ui.offset);
+            }
+          });
+        })(record));
       }
       return _results;
     };
