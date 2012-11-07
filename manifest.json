@@ -1,0 +1,21 @@
+{
+  "name": "Action Automator",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Record and replay series of actions.",
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "page": "background.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["jquery-1.8.2.min.js", "jquery-ui.min.js", "content-script.js"]
+    }
+  ],
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*"
+  ]
+}

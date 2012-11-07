@@ -1,0 +1,107 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
+  background: #eeeeee;
+  color: #333333;
+  width: 420px;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  background: #fff;
+  padding: 20px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  -o-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  -ms-border-radius: 0 0 5px 5px;
+  -o-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+#app input[type="text"] {
+  width: 466px;
+  font-size: 24px;
+  font-family: inherit;
+  line-height: 1.4em;
+  border: 0;
+  outline: none;
+  padding: 6px;
+  border: 1px solid #999999;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+  -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+  -o-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+}
+
+#app input::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+#record-list {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+}
+
+#record-list li {
+  padding: 18px 20px 18px 0;
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+}
+
+#record-list li:last-child {
+  border-bottom: none;
+}
+
+#record-list li.done label {
+  color: #777777;
+  text-decoration: line-through;
+}
+
+#record-list .delete {
+  position: absolute;
+  right: 5px;
+  top: 20px;
+}
+
+#record-list li.editing {
+  border-bottom: none;
+  margin-top: -1px;
+  padding: 0;
+}
+
+#record-list li.editing:last-child {
+  margin-bottom: -1px;
+}
+
+#record-list li.editing .edit {
+  display: block;
+  width: 444px;
+  padding: 13px 15px 14px 20px;
+  margin: 0;
+}
+
+#record-list li.editing .record {
+  display: none;
+}
+
+#record-list li .record label {
+  word-break: break-word;
+}
+
+#record-list li .edit {
+  display: none;
+}
