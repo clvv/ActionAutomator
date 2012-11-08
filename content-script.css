@@ -1,0 +1,12 @@
+.ui-menu { width: 100px; }
+.edit { display: none; width: 100px; }
+.editing { display: block; }
+
+.AA-record { position: absolute; }
+
+.AA-msg {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+}
+

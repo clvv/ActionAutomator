@@ -93,12 +93,6 @@ class PageControl
   constructor: ->
 
   place: (records) ->
-    $('body').append '<style>
-      .ui-menu { width: 100px; }
-      .AA-record { position: absolute; }
-      .edit { display: none; width: 100px; }
-      .editing { display: block; }
-    </style>'
     for record in records
       do (record) =>
         console.log record
@@ -172,6 +166,14 @@ class PageControl
       id  : id
       attr: attr
 
+  display: (msg) ->
+    $('.AA-msg').html "<h3>#{msg}</h3>"
+
+  clearDisplay: ->
+    $('.AA-msg').html ''
+
+$('body').append '<div class="AA-msg"></div>'
+
 er = null
 ep = null
 control = new PageControl
@@ -184,13 +186,16 @@ chrome.extension.onMessage.addListener (request, sender, sendResponse) ->
       console.log 'Action is "start"'
       er = new EventRecorder
       er.start()
+      control.display 'Recording...'
     when 'stop'
       console.log 'Action is "stop"'
       er.stop()
+      control.clearDisplay()
     when 'playback'
       console.log 'Action is "playback"'
       ep = new EventPlayback request.record
       ep.playback()
+      control.display 'Replaying...'
     when 'place'
       console.log 'Action is "place"'
 

@@ -143,12 +143,6 @@
     PageControl.prototype.place = function(records) {
       var record, _i, _len, _results,
         _this = this;
-      $('body').append('<style>\
-      .ui-menu { width: 100px; }\
-      .AA-record { position: absolute; }\
-      .edit { display: none; width: 100px; }\
-      .editing { display: block; }\
-    </style>');
       _results = [];
       for (_i = 0, _len = records.length; _i < _len; _i++) {
         record = records[_i];
@@ -256,9 +250,19 @@
       });
     };
 
+    PageControl.prototype.display = function(msg) {
+      return $('.AA-msg').html("<h3>" + msg + "</h3>");
+    };
+
+    PageControl.prototype.clearDisplay = function() {
+      return $('.AA-msg').html('');
+    };
+
     return PageControl;
 
   })();
+
+  $('body').append('<div class="AA-msg"></div>');
 
   er = null;
 
@@ -273,14 +277,17 @@
       case 'start':
         console.log('Action is "start"');
         er = new EventRecorder;
-        return er.start();
+        er.start();
+        return control.display('Recording...');
       case 'stop':
         console.log('Action is "stop"');
-        return er.stop();
+        er.stop();
+        return control.clearDisplay();
       case 'playback':
         console.log('Action is "playback"');
         ep = new EventPlayback(request.record);
-        return ep.playback();
+        ep.playback();
+        return control.display('Replaying...');
       case 'place':
         return console.log('Action is "place"');
     }
