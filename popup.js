@@ -31,7 +31,6 @@
 
       RecordView.prototype.events = {
         "click .playback": "playback",
-        "click .place": "placeOnPage",
         "dblclick .record": "edit",
         "click .delete": "delete",
         "keypress .edit": "updateOnEnter",
@@ -55,14 +54,6 @@
         });
       };
 
-      RecordView.prototype.placeOnPage = function() {
-        return chrome.extension.sendMessage({
-          type: 'action',
-          action: 'place',
-          id: this.model.id
-        });
-      };
-
       RecordView.prototype["delete"] = function() {
         return this.model.destroy();
       };
@@ -70,7 +61,6 @@
       RecordView.prototype.render = function() {
         this.$el.html('<div class="record">\
         <input class="playback" type="button" value="playback" />\
-        <input class="place" type="button" value="place" />\
         <label>' + this.model.get('title') + '</label>\
         <input class="delete" type="button" value="delete" />\
       </div>\

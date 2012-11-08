@@ -181,10 +181,6 @@
       return record.save(attr);
     };
 
-    Control.prototype.placeButton = function(tab, id, sendResponse) {
-      return window.Database.fetch();
-    };
-
     Control.prototype.addEvent = function(event) {
       return this.events.push(event);
     };
@@ -212,8 +208,6 @@
             return control.stop();
           case 'start-playback':
             return control.playback(request.id);
-          case 'place':
-            return control.placeButton(sender.tab, request.id, sendResponse);
           case 'delete':
             return control["delete"](request.id);
         }

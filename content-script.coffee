@@ -93,42 +93,84 @@ class PageControl
   constructor: ->
 
   place: (records) ->
+    $('body').append '<style>
+      .ui-menu { width: 100px; }
+      .AA-record { position: absolute; }
+      .edit { display: none; width: 100px; }
+      .editing { display: block; }
+    </style>'
     for record in records
       do (record) =>
         console.log record
-        $('body').append '<div id=' + record.id + '>
-          <p>
-            drag
-            <input class="playback" type="button" value="' + record.title + '" />
-            <input class="delete" type="button" value="Delete" />
-          </p>
+        $('body').append '
+          <div id=' + record.id + ' class="AA-record">
+            <div>
+              <button class="handle">◆</button>
+              <button class="playback">' + record.title + '</button>
+              <button class="dropdown">▾</button>
+            </div>
+            <ul>
+              <li><a class="rename">Rename</a></li>
+              <li><a class="delete">Delete</a></li>
+            </ul>
+            <input class="edit" type="text" value="' + record.title + '" />
         </div>'
         console.log record.offset
-        $("##{record.id}").offset record.offset if record.offset
-        $("##{record.id} .playback").click ->
+        record.offset ?= top: 0, left: 0
+        $("##{record.id}").offset record.offset
+        $("##{record.id} .playback").button().click ->
           chrome.extension.sendMessage
             type: 'action'
             action: 'start-playback'
             id: record.id
+        .next().button().click ->
+          menu = $(@).parent().next()
+          if menu.is ':visible'
+            menu.hide()
+          else
+            menu.show().position
+              my: 'left top',
+              at: 'left bottom',
+              of: @
+        .parent().buttonset()
+        .next().hide().menu()
         $("##{record.id} .delete").click ->
+          $("##{record.id}").html ''
           chrome.extension.sendMessage
             type: 'action'
             action: 'delete'
             id: record.id
+        $("##{record.id} .rename").click ->
+          input = $("##{record.id} .edit")
+          input.addClass 'editing'
+          input.position
+            my: 'left'
+            at: 'left'
+            of: @
+          setTimeout (-> input.focus()), 10
+        close = =>
+          input = $("##{record.id} .edit")
+          @updateRecord record.id, title: input.val()
+          input.removeClass 'editing'
+          $("##{record.id} .playback .ui-button-text").html input.val()
+        $("##{record.id} .edit").blur close
+        $("##{record.id} .edit").keypress (e) ->
+          close() if e.keyCode is 13
         $("##{record.id}").draggable
-          handle: 'p'
+          cancel: false
+          handle: '.handle'
           stop: (event, ui) =>
             console.log 'drag stopped!'
             console.log event
             console.log ui
-            @updateButtonOffset record.id, ui.offset
+            @updateRecord record.id,
+              offset: ui.offset
 
-  updateButtonOffset: (id, offset) ->
+  updateRecord: (id, attr) ->
     chrome.extension.sendMessage
-      type : 'data'
-      id   : id
-      attr :
-        offset: offset
+      type: 'data'
+      id  : id
+      attr: attr
 
 er = null
 ep = null

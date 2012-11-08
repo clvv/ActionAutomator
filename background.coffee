@@ -123,9 +123,6 @@ class Control
     console.log record
     record.save attr
 
-  placeButton: (tab, id, sendResponse) ->
-    window.Database.fetch()
-
   addEvent: (event) ->
     @events.push event
 
@@ -142,7 +139,6 @@ chrome.extension.onMessage.addListener (request, sender, sendResponse) ->
         when 'start' then control.start()
         when 'stop' then control.stop()
         when 'start-playback' then control.playback request.id
-        when 'place' then control.placeButton sender.tab, request.id, sendResponse
         when 'delete' then control.delete request.id
     when 'data'
       control.updateRecord request.id, request.attr

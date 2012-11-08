@@ -16,7 +16,6 @@ $(document).ready ->
 
     events:
         "click .playback"  : "playback",
-        "click .place"     : "placeOnPage",
         "dblclick .record" : "edit",
         "click .delete"    : "delete",
         "keypress .edit"   : "updateOnEnter",
@@ -35,19 +34,12 @@ $(document).ready ->
         action: 'start-playback'
         id: record.id
 
-    placeOnPage: ->
-      chrome.extension.sendMessage
-        type: 'action'
-        action: 'place'
-        id: @model.id
-
     delete: ->
       @model.destroy()
 
     render: ->
       @$el.html '<div class="record">
         <input class="playback" type="button" value="playback" />
-        <input class="place" type="button" value="place" />
         <label>' + @model.get('title') + '</label>
         <input class="delete" type="button" value="delete" />
       </div>

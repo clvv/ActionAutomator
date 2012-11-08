@@ -143,43 +143,104 @@
     PageControl.prototype.place = function(records) {
       var record, _i, _len, _results,
         _this = this;
+      $('body').append('<style>\
+      .ui-menu { width: 100px; }\
+      .AA-record { position: absolute; }\
+      .edit { display: none; width: 100px; }\
+      .editing { display: block; }\
+    </style>');
       _results = [];
       for (_i = 0, _len = records.length; _i < _len; _i++) {
         record = records[_i];
         _results.push((function(record) {
+          var close, _ref;
           console.log(record);
-          $('body').append('<div id=' + record.id + '>\
-          <p>\
-            drag\
-            <input class="playback" type="button" value="' + record.title + '" />\
-            <input class="delete" type="button" value="Delete" />\
-          </p>\
+          $('body').append('\
+          <div id=' + record.id + ' class="AA-record">\
+            <div>\
+              <button class="handle">◆</button>\
+              <button class="playback">' + record.title + '</button>\
+              <button class="dropdown">▾</button>\
+            </div>\
+            <ul>\
+              <li><a class="rename">Rename</a></li>\
+              <li><a class="delete">Delete</a></li>\
+            </ul>\
+            <input class="edit" type="text" value="' + record.title + '" />\
         </div>');
           console.log(record.offset);
-          if (record.offset) {
-            $("#" + record.id).offset(record.offset);
+          if ((_ref = record.offset) == null) {
+            record.offset = {
+              top: 0,
+              left: 0
+            };
           }
-          $("#" + record.id + " .playback").click(function() {
+          $("#" + record.id).offset(record.offset);
+          $("#" + record.id + " .playback").button().click(function() {
             return chrome.extension.sendMessage({
               type: 'action',
               action: 'start-playback',
               id: record.id
             });
-          });
+          }).next().button().click(function() {
+            var menu;
+            menu = $(this).parent().next();
+            if (menu.is(':visible')) {
+              return menu.hide();
+            } else {
+              return menu.show().position({
+                my: 'left top',
+                at: 'left bottom',
+                of: this
+              });
+            }
+          }).parent().buttonset().next().hide().menu();
           $("#" + record.id + " .delete").click(function() {
+            $("#" + record.id).html('');
             return chrome.extension.sendMessage({
               type: 'action',
               action: 'delete',
               id: record.id
             });
           });
+          $("#" + record.id + " .rename").click(function() {
+            var input;
+            input = $("#" + record.id + " .edit");
+            input.addClass('editing');
+            input.position({
+              my: 'left',
+              at: 'left',
+              of: this
+            });
+            return setTimeout((function() {
+              return input.focus();
+            }), 10);
+          });
+          close = function() {
+            var input;
+            input = $("#" + record.id + " .edit");
+            _this.updateRecord(record.id, {
+              title: input.val()
+            });
+            input.removeClass('editing');
+            return $("#" + record.id + " .playback .ui-button-text").html(input.val());
+          };
+          $("#" + record.id + " .edit").blur(close);
+          $("#" + record.id + " .edit").keypress(function(e) {
+            if (e.keyCode === 13) {
+              return close();
+            }
+          });
           return $("#" + record.id).draggable({
-            handle: 'p',
+            cancel: false,
+            handle: '.handle',
             stop: function(event, ui) {
               console.log('drag stopped!');
               console.log(event);
               console.log(ui);
-              return _this.updateButtonOffset(record.id, ui.offset);
+              return _this.updateRecord(record.id, {
+                offset: ui.offset
+              });
             }
           });
         })(record));
@@ -187,13 +248,11 @@
       return _results;
     };
 
-    PageControl.prototype.updateButtonOffset = function(id, offset) {
+    PageControl.prototype.updateRecord = function(id, attr) {
       return chrome.extension.sendMessage({
         type: 'data',
         id: id,
-        attr: {
-          offset: offset
-        }
+        attr: attr
       });
     };
 
