@@ -31,7 +31,8 @@
       RecordView.prototype.tagName = 'li';
 
       RecordView.prototype.events = {
-        "click .record-button": "select"
+        "click .record-button": "select",
+        "click .delete": "delete"
       };
 
       RecordView.prototype.initialize = function() {
@@ -49,6 +50,10 @@
         return window.App.render();
       };
 
+      RecordView.prototype["delete"] = function() {
+        return this.model.destroy();
+      };
+
       return RecordView;
 
     })(Backbone.View);
@@ -63,7 +68,9 @@
       EditView.prototype.tagName = 'div';
 
       EditView.prototype.events = {
-        "click #save": "save"
+        "click .save": "save",
+        "click .replicate": "replicate",
+        "click .delete": "delete"
       };
 
       EditView.prototype.initialize = function() {
@@ -85,7 +92,9 @@
           html += '</ul></li>';
         }
         html += '</ul>';
-        html += '<a class="btn btn-primary" id="save">Save</a>';
+        html += '<a class="btn btn-primary save">Save</a>';
+        html += '<a class="btn btn-success replicate">Replicate</a>';
+        html += '<a class="btn btn-danger delete">Delete</a>';
         this.$el.html(html);
         return this;
       };
@@ -110,6 +119,14 @@
         return this.model.save({
           events: events
         });
+      };
+
+      EditView.prototype.replicate = function() {
+        return window.Database.createRecord(this.model.get('events'));
+      };
+
+      EditView.prototype["delete"] = function() {
+        return this.model.destroy();
       };
 
       return EditView;

@@ -34,6 +34,36 @@
 
     Database.prototype.model = Record;
 
+    Database.prototype.processURL = function(url) {
+      return url.split(/[?#]/)[0];
+    };
+
+    Database.prototype.createRecord = function(events) {
+      var model, record, url;
+      if (events.length === 0) {
+        return false;
+      }
+      url = this.processURL(events[0].url);
+      record = {
+        events: events,
+        size: events.length,
+        url: url
+      };
+      console.log('Saving record...');
+      console.log(record);
+      model = this.create(record);
+      return this.addRecord(record.url, model.id);
+    };
+
+    Database.prototype.updateHash = function(url, id) {
+      var ids, key, val;
+      key = "HT-" + url;
+      val = localStorage[key] || "";
+      ids = val.split(/[, ]+/);
+      ids.push(id);
+      return localStorage[key] = ids.join(', ');
+    };
+
     return Database;
 
   })(Backbone.Collection);

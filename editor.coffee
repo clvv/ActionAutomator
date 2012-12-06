@@ -8,6 +8,7 @@ $(document).ready ->
 
     events:
       "click .record-button": "select"
+      "click .delete": "delete"
 
     initialize: ->
       @model.bind 'change', @render, @
@@ -21,11 +22,16 @@ $(document).ready ->
       window.App.record = @model
       window.App.render()
 
+    delete: ->
+      @model.destroy()
+
   class EditView extends Backbone.View
     tagName: 'div'
 
     events:
-      "click #save": "save"
+      "click .save": "save"
+      "click .replicate": "replicate"
+      "click .delete": "delete"
 
     initialize: ->
       @model.bind 'destroy', @remove, @
@@ -41,7 +47,9 @@ $(document).ready ->
         html += '<li>Value: <input type="text" class="value" value="' + event.value + '"></li>'
         html += '</ul></li>'
       html += '</ul>'
-      html += '<a class="btn btn-primary" id="save">Save</a>'
+      html += '<a class="btn btn-primary save">Save</a>'
+      html += '<a class="btn btn-success replicate">Replicate</a>'
+      html += '<a class="btn btn-danger delete">Delete</a>'
       @$el.html html
       @
 
@@ -56,6 +64,12 @@ $(document).ready ->
           value: (event.find '.value').val()
       @model.save title: (@$el.find '.title').val()
       @model.save events: events
+
+    replicate: ->
+      window.Database.createRecord @model.get 'events'
+
+    delete: ->
+      @model.destroy()
 
   class AppView extends Backbone.View
     el: $ '#app'
