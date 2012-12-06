@@ -105,9 +105,10 @@ class PageControl
             </div>
             <ul>
               <li><a class="rename">Rename</a></li>
+              <li><a class="edit">Edit</a></li>
               <li><a class="delete">Delete</a></li>
             </ul>
-            <input class="edit" type="text" value="' + record.title + '" />
+            <input class="input" type="text" value="' + record.title + '" />
         </div>'
         console.log record.offset
         record.offset ?= top: 0, left: 0
@@ -128,6 +129,8 @@ class PageControl
               of: @
         .parent().buttonset()
         .next().hide().menu()
+        $("##{record.id} .edit").click ->
+          window.open "#{chrome.extension.getURL 'editor.html'}##{record.id}", '_newtab'
         $("##{record.id} .delete").click ->
           $("##{record.id}").html ''
           chrome.extension.sendMessage
@@ -135,7 +138,7 @@ class PageControl
             action: 'delete'
             id: record.id
         $("##{record.id} .rename").click ->
-          input = $("##{record.id} .edit")
+          input = $("##{record.id} .input")
           input.addClass 'editing'
           input.position
             my: 'left'
@@ -143,12 +146,12 @@ class PageControl
             of: @
           setTimeout (-> input.focus()), 10
         close = =>
-          input = $("##{record.id} .edit")
+          input = $("##{record.id} .input")
           @updateRecord record.id, title: input.val()
           input.removeClass 'editing'
           $("##{record.id} .playback .ui-button-text").html input.val()
-        $("##{record.id} .edit").blur close
-        $("##{record.id} .edit").keypress (e) ->
+        $("##{record.id} .input").blur close
+        $("##{record.id} .input").keypress (e) ->
           close() if e.keyCode is 13
         $("##{record.id}").draggable
           cancel: false

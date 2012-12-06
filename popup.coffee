@@ -26,7 +26,6 @@ $(document).ready ->
       @model.bind 'destroy', @remove, @
 
     playback: ->
-      record = @model
       console.log record
       console.log record.id
       chrome.extension.sendMessage

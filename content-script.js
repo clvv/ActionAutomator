@@ -158,9 +158,10 @@
             </div>\
             <ul>\
               <li><a class="rename">Rename</a></li>\
+              <li><a class="edit">Edit</a></li>\
               <li><a class="delete">Delete</a></li>\
             </ul>\
-            <input class="edit" type="text" value="' + record.title + '" />\
+            <input class="input" type="text" value="' + record.title + '" />\
         </div>');
           console.log(record.offset);
           if ((_ref = record.offset) == null) {
@@ -189,6 +190,9 @@
               });
             }
           }).parent().buttonset().next().hide().menu();
+          $("#" + record.id + " .edit").click(function() {
+            return window.open("" + (chrome.extension.getURL('editor.html')) + "#" + record.id, '_newtab');
+          });
           $("#" + record.id + " .delete").click(function() {
             $("#" + record.id).html('');
             return chrome.extension.sendMessage({
@@ -199,7 +203,7 @@
           });
           $("#" + record.id + " .rename").click(function() {
             var input;
-            input = $("#" + record.id + " .edit");
+            input = $("#" + record.id + " .input");
             input.addClass('editing');
             input.position({
               my: 'left',
@@ -212,15 +216,15 @@
           });
           close = function() {
             var input;
-            input = $("#" + record.id + " .edit");
+            input = $("#" + record.id + " .input");
             _this.updateRecord(record.id, {
               title: input.val()
             });
             input.removeClass('editing');
             return $("#" + record.id + " .playback .ui-button-text").html(input.val());
           };
-          $("#" + record.id + " .edit").blur(close);
-          $("#" + record.id + " .edit").keypress(function(e) {
+          $("#" + record.id + " .input").blur(close);
+          $("#" + record.id + " .input").keypress(function(e) {
             if (e.keyCode === 13) {
               return close();
             }

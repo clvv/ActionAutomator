@@ -18,5 +18,9 @@
   ],
   "permissions": [
     "tabs", "http://*/*", "https://*/*"
+  ],
+  "web_accessible_resources": [
+      "img/glyphicons-halflings.png",
+      "img/glyphicons-halflings-white.png"
   ]
 }
