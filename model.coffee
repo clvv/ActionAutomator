@@ -20,7 +20,7 @@ class Database extends Backbone.Collection
     console.log 'Saving record...'
     console.log record
     model = @create record
-    @addRecord record.url, model.id
+    @updateHash record.url, model.id
 
   updateHash: (url, id) ->
     key = "HT-#{url}"

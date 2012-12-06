@@ -30,25 +30,27 @@
           return null;
         });
       });
-      return this.save();
+      this.save({
+        events: this.events
+      });
+      return this.events = [];
     };
 
-    Control.prototype.save = function() {
-      var model, record, url;
-      if (this.events.length === 0) {
+    Control.prototype.save = function(record) {
+      var model, _ref, _ref1;
+      if (record.events.length === 0) {
         return false;
       }
-      url = this.processURL(this.events[0].url);
-      record = {
-        events: this.events,
-        size: this.events.length,
-        url: url
-      };
+      if ((_ref = record.url) == null) {
+        record.url = this.processURL(record.events[0].url);
+      }
+      if ((_ref1 = record.size) == null) {
+        record.size = record.events.length;
+      }
       console.log('Saving record...');
       console.log(record);
       model = window.Database.create(record);
-      this.addRecord(record.url, model.id);
-      return this.events = [];
+      return this.addRecord(record.url, model.id);
     };
 
     Control.prototype["delete"] = function(id) {
@@ -210,6 +212,8 @@
             return control.playback(request.id);
           case 'delete':
             return control["delete"](request.id);
+          case 'save':
+            return control.save(request.record);
         }
         break;
       case 'data':

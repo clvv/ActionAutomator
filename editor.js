@@ -69,7 +69,8 @@
 
       EditView.prototype.events = {
         "click .save": "save",
-        "click .replicate": "replicate",
+        "click .duplicate": "duplicate",
+        "click .reset": "render",
         "click .delete": "delete"
       };
 
@@ -93,7 +94,8 @@
         }
         html += '</ul>';
         html += '<a class="btn btn-primary save">Save</a>';
-        html += '<a class="btn btn-success replicate">Replicate</a>';
+        html += '<a class="btn btn-success duplicate">Duplicate</a>';
+        html += '<a class="btn btn-warning reset">Reset</a>';
         html += '<a class="btn btn-danger delete">Delete</a>';
         this.$el.html(html);
         return this;
@@ -121,8 +123,17 @@
         });
       };
 
-      EditView.prototype.replicate = function() {
-        return window.Database.createRecord(this.model.get('events'));
+      EditView.prototype.duplicate = function() {
+        var record;
+        record = {
+          events: this.model.get('events')
+        };
+        record = window.Database.create(record);
+        return chrome.extension.sendMessage({
+          type: 'action',
+          action: 'save',
+          record: record.attributes
+        });
       };
 
       EditView.prototype["delete"] = function() {

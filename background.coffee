@@ -15,20 +15,17 @@ class Control
     chrome.tabs.getSelected null, (tab) ->
       chrome.tabs.sendMessage tab.id, action: "stop", (response) ->
         null
-    @save()
+    @save events: @events
+    @events = []
 
-  save: ->
-    return false if @events.length is 0
-    url = @processURL @events[0].url
-    record =
-      events: @events
-      size: @events.length
-      url: url
+  save: (record) ->
+    return false if record.events.length is 0
+    record.url ?= @processURL record.events[0].url
+    record.size ?= record.events.length
     console.log 'Saving record...'
     console.log record
     model = window.Database.create record
     @addRecord record.url, model.id
-    @events = []
 
   delete: (id) ->
     window.Database.fetch()
@@ -140,6 +137,7 @@ chrome.extension.onMessage.addListener (request, sender, sendResponse) ->
         when 'stop' then control.stop()
         when 'start-playback' then control.playback request.id
         when 'delete' then control.delete request.id
+        when 'save' then control.save request.record
     when 'data'
       control.updateRecord request.id, request.attr
     when 'ping'

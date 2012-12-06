@@ -52,7 +52,7 @@
       console.log('Saving record...');
       console.log(record);
       model = this.create(record);
-      return this.addRecord(record.url, model.id);
+      return this.updateHash(record.url, model.id);
     };
 
     Database.prototype.updateHash = function(url, id) {

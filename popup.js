@@ -43,8 +43,6 @@
       };
 
       RecordView.prototype.playback = function() {
-        var record;
-        record = this.model;
         console.log(record);
         console.log(record.id);
         return chrome.extension.sendMessage({
