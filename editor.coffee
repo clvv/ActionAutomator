@@ -46,6 +46,7 @@ $(document).ready ->
         html += '<li>Target: <input type="text" class="target" value=\'' + event.target + '\'></li>'
         html += '<li>Type: <input type="text" class="type" value="' + event.type + '"></li>'
         html += '<li>Value: <input type="text" class="value" value="' + event.value + '"></li>'
+        html += '<a class="btn btn-danger delete-event">Delete</a>'
         html += '</ul></li>'
       html += '</ul>'
       html += '<a class="btn btn-primary save">Save</a>'
@@ -100,6 +101,11 @@ $(document).ready ->
     addOne: (record) ->
       view = new RecordView model: record
       $('#record-list').append view.render().el
+
+  # Hack: set up handler for removing event
+  # If we were to do it cleanly, then every event will have to have its own view
+  $(document).on 'click', '.delete-event', ->
+    $(@).parent().parent().remove()
 
   router = window.router = new AppRouter
 

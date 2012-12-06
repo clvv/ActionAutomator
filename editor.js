@@ -90,6 +90,7 @@
           html += '<li>Target: <input type="text" class="target" value=\'' + event.target + '\'></li>';
           html += '<li>Type: <input type="text" class="type" value="' + event.type + '"></li>';
           html += '<li>Value: <input type="text" class="value" value="' + event.value + '"></li>';
+          html += '<a class="btn btn-danger delete-event">Delete</a>';
           html += '</ul></li>';
         }
         html += '</ul>';
@@ -185,6 +186,9 @@
       return AppView;
 
     })(Backbone.View);
+    $(document).on('click', '.delete-event', function() {
+      return $(this).parent().parent().remove();
+    });
     router = window.router = new AppRouter;
     App = window.App = new AppView;
     window.RecordView = RecordView;
